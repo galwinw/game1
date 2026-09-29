@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Head Hoops</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #0d0f14; overflow: hidden; }
+  html, body { margin: 0; height: 100%; background: #0d0f14; overflow: hidden; color-scheme: dark; }
   body { display: flex; align-items: center; justify-content: center; }
   canvas {
     display: block;
@@ -95,6 +95,12 @@ addEventListener("keydown", (e) => {
   initAudio();
 });
 addEventListener("keyup", (e) => { keys[e.code] = false; });
+canvas.addEventListener("pointerdown", () => {
+  window.focus();
+  initAudio();
+  if (state === "title" || state === "over") newGame();
+  else if (state === "paused") state = pausedFrom;
+});
 addEventListener("blur", () => {
   for (const k in keys) keys[k] = false;
   if (state === "play" || state === "tip" || state === "scored") pause();
@@ -869,7 +875,7 @@ function draw() {
       { text: "Shoot while jumping near the rim to DUNK. Shots from past the 3PT line are worth 3." },
       { text: "Jump into your opponent's shot to BLOCK it. Head the ball around like Head Soccer!" },
       { text: "P = pause  ·  M = mute", color: "#9aa3b5" },
-    ], "Press SPACE to start");
+    ], "Click or press SPACE to start");
   } else if (state === "paused") {
     drawOverlay({ text: "PAUSED", color: "#ffd166" }, [
       { text: "P / SPACE to resume  ·  R to restart" },
@@ -878,7 +884,7 @@ function draw() {
     const w = score[0] > score[1] ? 0 : 1;
     drawOverlay({ text: `${TEAM[w].name} WINS!`, color: TEAM[w].color }, [
       { text: `${score[0]}  –  ${score[1]}`, color: "#fff", font: "900 56px system-ui, sans-serif", gap: 60 },
-    ], "Press SPACE for a rematch");
+    ], "Click or press SPACE for a rematch");
   }
 }
 
